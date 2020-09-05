@@ -1,78 +1,101 @@
-$('#form').submit(function(e){
+$('#form').submit(function(e) {
     e.preventDefault();
     chart();
 })
 
 
-function chart(){
+function chart() {
 
     var fromDate = $('#from').val();
     var toDate = $('#to').val();
-    var values = [[]];
-    var arr =[];
+    var dateValues = [
+        [1293840000000, 15],
+        [1295049600000, 5],
+        [1295395200000, 17],
+        [1296172800000, 18]
 
-    for(var i = Date.parse(fromDate);i<Date.parse(toDate);i=i+518400000){
-        arr.push(i);
+    ];
+    var data = []
+    
+
+    for (var i = Date.parse(fromDate); i < Date.parse(toDate); i = i + 86400000) {
+        var test = true;
+        for (j = 0; j < dateValues.length; j++) {
+            var current = dateValues[j];
+            if (current[0] === i) {
+                data.push(current);
+            } else {
+                if (test)
+                    data.push([i, 0])
+            }
+            test = false;
+        }
+
     }
 
+
+
+
+   
     Highcharts.chart('container', {
 
         title: {
-        text: 'Solar Employment Growth by Sector, 2010-2016'
+            text: 'Solar Employment Growth by Sector, 2010-2016'
         },
 
         subtitle: {
-        text: 'Source: thesolarfoundation.com'
+            text: 'Source: thesolarfoundation.com'
         },
 
-            yAxis: {
-                
-            },
+        yAxis: {
+
+        },
 
         xAxis: {
             type: 'datetime',
             min: Date.parse(fromDate),
             max: Date.parse(toDate),
-            tickInterval: 2592000000,
+            tickInterval: 86400000, // dailly
 
         },
 
         legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'middle'
         },
 
         plotOptions: {
-        series: {
-        label: {
-            connectorAllowed: false
-        },
-        // pointStart: Date.parse(fromDate)
-        }
+            series: {
+                label: {
+                    connectorAllowed: false
+                },
+                // pointStart: Date.parse(fromDate)
+            }
         },
         series: [{
-        name: 'Installation',
-        data:  
-
-            // js_array1.map((item, i) => [Date.parse(fromDate) + (518400000 * (i + 1)), item])
-            arr.map((item) => [item, Math.floor(Math.random() * 10)])
+            name: 'Installation',
+            data:
+                /**add random data from 0 to 9 */
+                // arr.map((item) => [item, Math.floor(Math.random() * 10)])
+                /**add specified data from data array and set the not specified dateValues to zero */
+                data,
 
         }],
 
         responsive: {
-        rules: [{
-        condition: {
-            maxWidth: 500
-        },
-        chartOptions: {
-            legend: {
-                layout: 'horizontal',
-                align: 'center',
-                verticalAlign: 'bottom'
-            }
-        }
-        }]
+            rules: [{
+                condition: {
+                    maxWidth: 500
+                },
+                chartOptions: {
+                    legend: {
+                        layout: 'horizontal',
+                        align: 'center',
+                        verticalAlign: 'bottom'
+                    }
+                }
+            }]
         }
 
 
