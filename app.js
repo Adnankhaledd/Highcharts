@@ -8,32 +8,46 @@ function chart() {
 
     var fromDate = $('#from').val();
     var toDate = $('#to').val();
+    var dates = [];
     var dateValues = [
-        [1293840000000, 15],
-        [1295049600000, 5],
-        [1295395200000, 17],
-        [1296172800000, 18]
+        {x:1293840000000, y:15},
+        {x:1295049600000, y:5},
+        {x:1295395200000, y:17},
+        {x:1296172800000, y:18}
 
     ];
-    var data = []
-    
+    var dateValues2 = [
+        {x:1293840000000, y:15},
+        {x:1294012800000, y:16},
+        {x:1295395200000, y:4},
+        {x:1296172800000, y:13},
+        {x:1294617600000, y:18}
+    ];
 
-    for (var i = Date.parse(fromDate); i < Date.parse(toDate); i = i + 86400000) {
-        var test = true;
-        for (j = 0; j < dateValues.length; j++) {
-            var current = dateValues[j];
-            if (current[0] === i) {
-                data.push(current);
-            } else {
-                if (test)
-                    data.push([i, 0])
-            }
-            test = false;
-        }
-
+    for (i = Date.parse(fromDate); i < Date.parse(toDate); i = i + 86400000){
+        dates.push(i)
     }
 
+    function setData(dataValues){
+        var data  = [],i,j,current,test
+        for (i = Date.parse(fromDate); i < Date.parse(toDate); i = i + 86400000) {
+             test = true;
+            for (j = 0; j < dataValues.length; j++) {
+                current = dataValues[j];
+                if (current.x === i) {
+                    data.push(current);
+                    test = false
+                } 
+            } if (test)
+                data.push({x:i, y:0})
 
+        } 
+        return data
+    }
+        
+
+                 
+                  
 
 
    
@@ -70,18 +84,27 @@ function chart() {
                 label: {
                     connectorAllowed: false
                 },
-                // pointStart: Date.parse(fromDate)
+                
             }
         },
         series: [{
-            name: 'Installation',
+            name: 'data set 1 ',
+            color: '#0000ff',
             data:
                 /**add random data from 0 to 9 */
-                // arr.map((item) => [item, Math.floor(Math.random() * 10)])
+                // dates.map((item) => [item, Math.floor(Math.random() * 10)])
                 /**add specified data from data array and set the not specified dateValues to zero */
-                data,
+                setData(dateValues),
+        },  {
+
+            name: 'data set 2',
+            color: '#FF0000',
+            data: setData(dateValues2),
 
         }],
+    
+    
+    
 
         responsive: {
             rules: [{
